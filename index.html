@@ -1,0 +1,2341 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدید فارم منیجمنٹ سسٹم</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#10b981">
+    <meta name="description" content="مکمل فارم اکاؤنٹنگ اور منیجمنٹ سسٹم">
+    <link rel="manifest" href="#" id="manifest-placeholder">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🌾</text></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style id="font-style-holder">
+        body, button, input, select, textarea {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .urdu-text {
+            font-family: 'Noto Nastaliq Urdu', system-ui;
+        }
+    </style>
+    
+    <style>
+        /* Core Dark Mode Improvements */
+        body.dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        
+        /* Backgrounds */
+        body.dark-mode .bg-white { background-color: #2d3748; }
+        body.dark-mode .bg-gray-100 { background-color: #1a202c; }
+        body.dark-mode .bg-gray-50 { background-color: #2d3748; }
+        body.dark-mode .bg-green-50 { background-color: #22543d; }
+        body.dark-mode .bg-red-50 { background-color: #742a2a; }
+        body.dark-mode .bg-blue-50 { background-color: #2c5282; }
+        body.dark-mode .bg-yellow-50 { background-color: #744210; }
+        
+        /* Text Colors */
+        body.dark-mode .text-gray-700 { color: #e2e8f0 !important; }
+        body.dark-mode .text-gray-600 { color: #cbd5e0 !important; }
+        body.dark-mode .text-gray-500 { color: #a0aec0 !important; }
+        body.dark-mode .text-green-700 { color: #48bb78 !important; }
+        body.dark-mode .text-red-600 { color: #fc8181 !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4 { color: #fff !important; }
+
+        /* Borders */
+        body.dark-mode .border { border-color: #4a5568 !important; }
+        body.dark-mode .border-b-2 { border-bottom-color: #4a5568 !important; }
+
+        /* Inputs & Selects */
+        body.dark-mode input, 
+        body.dark-mode select, 
+        body.dark-mode textarea {
+            background-color: #4a5568 !important; 
+            color: #ffffff !important;
+            border-color: #718096 !important;
+        }
+        body.dark-mode input::placeholder,
+        body.dark-mode textarea::placeholder {
+            color: #cbd5e0 !important;
+            opacity: 0.7;
+        }
+        body.dark-mode option {
+            background-color: #4a5568;
+            color: #ffffff;
+        }
+
+        /* Buttons in dark mode */
+        body.dark-mode button.bg-white {
+            background-color: #2d3748 !important;
+            color: white !important;
+        }
+        body.dark-mode button.bg-gray-300 {
+            background-color: #4a5568 !important;
+            color: white !important;
+        }
+
+        /* --- Custom Searchable Dropdown Styles --- */
+        .custom-dropdown-container {
+            position: relative;
+        }
+        .custom-dropdown-options {
+            position: absolute;
+            z-index: 50;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: none;
+            margin-top: 4px;
+        }
+        .custom-dropdown-options.show {
+            display: block;
+        }
+        .custom-dropdown-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .custom-dropdown-option:last-child {
+            border-bottom: none;
+        }
+        .custom-dropdown-option:hover {
+            background-color: #f0fdf4;
+            color: #166534;
+        }
+        .custom-dropdown-option.selected {
+            background-color: #10b981;
+            color: white;
+        }
+        body.dark-mode .custom-dropdown-options {
+            background-color: #2d3748;
+            border-color: #4a5568;
+        }
+        body.dark-mode .custom-dropdown-option {
+            border-bottom-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode .custom-dropdown-option:hover {
+            background-color: #22543d;
+            color: #fff;
+        }
+
+        /* Multi-Entry Row Styles */
+        .entry-row {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: #f9fafb;
+        }
+        body.dark-mode .entry-row {
+            background: #374151;
+            border-color: #4a5568;
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast {
+            background-color: #2d3748;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(20px);
+            min-width: 250px;
+            pointer-events: auto;
+            border: 1px solid #4a5568;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background-color: #2f855a; border-color: #48bb78; }
+        .toast.error { background-color: #c53030; border-color: #fc8181; }
+        .toast.info { background-color: #2b6cb0; border-color: #63b3ed; }
+        .toast.warning { background-color: #d69e2e; border-color: #ecc94b; }
+
+        /* Print Styles */
+        @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            #app { padding: 0; margin: 0; max-width: 100%; }
+            .print-area { display: block !important; box-shadow: none; border: none; }
+            body.dark-mode .bg-white, body.dark-mode .bg-gray-100 { background-color: white !important; color: black !important; }
+            body.dark-mode .text-gray-700 { color: black !important; }
+            body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color: transparent !important; color: black !important; border: 1px solid #ddd !important; }
+        }
+
+        /* Button Active States */
+        .btn-active { transform: scale(0.95); box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+        body.dark-mode .custom-scroll::-webkit-scrollbar-track { background: #2d3748; }
+        body.dark-mode .custom-scroll::-webkit-scrollbar-thumb { background: #48bb78; }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Stats Cards Animation */
+        .stat-card { transition: transform 0.2s ease; }
+        .stat-card:hover { transform: translateY(-5px); }
+
+        /* Modal */
+        .modal-backdrop { background-color: rgba(0,0,0,0.5); backdrop-filter: blur(2px); }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800 transition-colors duration-300">
+    <div id="app" class="container mx-auto p-2 md:p-4 max-w-7xl">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-green-600 to-green-500 text-white rounded-lg shadow-lg p-4 md:p-6 mb-6 no-print">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold urdu-text">🌾 جدید فارم منیجمنٹ سسٹم</h1>
+                    <p class="text-sm md:text-base mt-1 opacity-90 urdu-text">مکمل اکاؤنٹنگ اور رپورٹنگ حل</p>
+                </div>
+                <div class="flex gap-2">
+                    <button id="darkModeToggle" class="bg-white bg-opacity-20 hover:bg-opacity-30 p-2 rounded-lg transition" title="Dark Mode">
+                        <span id="darkModeIcon">🌙</span>
+                    </button>
+                    <button id="installBtn" class="hidden bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-2 rounded-lg text-sm urdu-text transition">
+                        📱 انسٹال کریں
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white dark-mode rounded-lg shadow mb-6 no-print overflow-x-auto border border-gray-200">
+            <div id="nav-tabs" class="flex border-b border-gray-200">
+                <button class="tab-btn urdu-text px-4 py-3 font-semibold text-green-600 border-b-2 border-green-600 whitespace-nowrap bg-green-50" data-tab="dashboard">📊 ڈیش بورڈ</button>
+                <button class="tab-btn urdu-text px-4 py-3 font-semibold hover:text-green-600 whitespace-nowrap hover:bg-gray-50" data-tab="entry">✏️ انٹری</button>
+                <button class="tab-btn urdu-text px-4 py-3 font-semibold hover:text-green-600 whitespace-nowrap hover:bg-gray-50" data-tab="parties">👥 پارٹیز</button>
+                <button class="tab-btn urdu-text px-4 py-3 font-semibold hover:text-green-600 whitespace-nowrap hover:bg-gray-50" data-tab="reports">📄 رپورٹس</button>
+                <button class="tab-btn urdu-text px-4 py-3 font-semibold hover:text-green-600 whitespace-nowrap hover:bg-gray-50" data-tab="settings">⚙️ ترتیبات</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" class="tab-content">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg shadow-lg p-4">
+                    <div class="text-3xl mb-2">💰</div>
+                    <div class="text-sm opacity-90 urdu-text">آج کی آمدن</div>
+                    <div class="text-2xl font-bold" id="todayIncome">0</div>
+                </div>
+                <div class="stat-card bg-gradient-to-br from-red-500 to-red-600 text-white rounded-lg shadow-lg p-4">
+                    <div class="text-3xl mb-2">💸</div>
+                    <div class="text-sm opacity-90 urdu-text">آج کا خرچہ</div>
+                    <div class="text-2xl font-bold" id="todayExpense">0</div>
+                </div>
+                <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg shadow-lg p-4">
+                    <div class="text-3xl mb-2">🏦</div>
+                    <div class="text-sm opacity-90 urdu-text">کل بیلنس</div>
+                    <div class="text-2xl font-bold" id="totalBalance">0</div>
+                </div>
+                <div class="stat-card bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-lg shadow-lg p-4">
+                    <div class="text-3xl mb-2">📝</div>
+                    <div class="text-sm opacity-90 urdu-text">کل اُدھار</div>
+                    <div class="text-2xl font-bold" id="totalCredit">0</div>
+                </div>
+            </div>
+
+            <!-- Charts and Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">اس مہینے کا خلاصہ</h3>
+                    <div class="relative h-72 w-full">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">حالیہ ٹرانزیکشنز</h3>
+                    <div id="recentTransactions" class="space-y-2 max-h-72 overflow-y-auto custom-scroll pr-1"></div>
+                </div>
+            </div>
+
+            <!-- Reminders -->
+            <div class="bg-white dark-mode rounded-lg shadow-lg p-6 mt-6 border border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-green-700 dark-mode-text-green-400 urdu-text">یاد دہانیاں</h3>
+                    <button id="addReminderBtn" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm urdu-text hover:bg-green-700">+ نئی یاد دہانی</button>
+                </div>
+                <div id="remindersList" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- Entry Tab (UPDATED WITH MULTIPLE ROWS) -->
+        <div id="entry-tab" class="tab-content hidden">
+            <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                <h2 class="text-2xl font-bold mb-6 text-green-700 dark-mode-text-green-400 urdu-text">نیا اندراج</h2>
+                <form id="entryForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Date -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">تاریخ</label>
+                            <input type="date" id="entryDate" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                        </div>
+
+                        <!-- Type Buttons -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">قسم منتخب کریں</label>
+                            <div class="flex gap-2">
+                                <button type="button" id="incomeBtn" class="flex-1 py-3 rounded-lg border-2 transition-all urdu-text bg-green-50 border-green-300 hover:bg-green-100">
+                                    <span class="text-2xl">💰</span><br>آمدنی
+                                </button>
+                                <button type="button" id="expenseBtn" class="flex-1 py-3 rounded-lg border-2 transition-all urdu-text bg-red-50 border-red-300 hover:bg-red-100">
+                                    <span class="text-2xl">💸</span><br>خرچہ
+                                </button>
+                            </div>
+                            <input type="hidden" id="entryType" required>
+                        </div>
+                    </div>
+
+                    <!-- Payment Type (Can be hidden from settings) -->
+                    <div id="paymentTypeContainer">
+                        <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">ادائیگی کی قسم</label>
+                        <div class="flex gap-2">
+                            <button type="button" id="cashPaymentBtn" class="flex-1 py-2 rounded-lg border-2 bg-blue-500 text-white border-blue-600 urdu-text transition hover:bg-blue-600">
+                                💵 نقد
+                            </button>
+                            <button type="button" id="creditPaymentBtn" class="flex-1 py-2 rounded-lg border-2 bg-yellow-50 border-yellow-300 urdu-text transition hover:bg-yellow-100">
+                                📝 اُدھار
+                            </button>
+                        </div>
+                        <input type="hidden" id="paymentType" value="cash">
+                    </div>
+
+                    <!-- Credit Fields -->
+                    <div id="creditFields" class="hidden bg-yellow-50 p-4 rounded-lg space-y-3 border border-yellow-200">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">پارٹی منتخب کریں</label>
+                            <select id="creditParty" class="w-full p-2 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                                <option value="">نیا پارٹی یا موجودہ منتخب کریں</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">یا نیا پارٹی کا نام</label>
+                            <input type="text" id="newPartyName" placeholder="نیا پارٹی کا نام" class="w-full p-2 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">واپسی کی تاریخ</label>
+                            <input type="date" id="creditDueDate" class="w-full p-2 border border-gray-300 rounded-lg dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                        </div>
+                    </div>
+
+                    <!-- Multiple Entry Rows Container -->
+                    <div id="multipleEntriesContainer" class="space-y-2">
+                        <!-- First Row (Default) -->
+                        <div class="entry-row" data-row-id="0">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="custom-dropdown-container">
+                                    <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">اکاؤنٹ ہیڈ</label>
+                                    <input type="text" class="entry-account-input w-full p-2 border border-gray-300 rounded-lg urdu-text" placeholder="مثال: فصل، اسٹور..." autocomplete="off">
+                                    <input type="hidden" class="entry-account-id" required>
+                                    <div class="entry-account-dropdown custom-dropdown-options custom-scroll"></div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">رقم</label>
+                                    <input type="number" class="entry-amount w-full p-2 border border-gray-300 rounded-lg" required min="0" step="0.01">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">تفصیل</label>
+                                    <input type="text" class="entry-desc w-full p-2 border border-gray-300 rounded-lg urdu-text">
+                                </div>
+                            </div>
+                            <!-- Crop Fields for this row -->
+                            <div class="crop-fields-row hidden grid grid-cols-3 gap-3 mt-2 p-2 bg-green-100 dark-mode-bg-green-900 rounded">
+                                <div>
+                                    <label class="text-xs urdu-text">وزن (من/کلو)</label>
+                                    <input type="number" class="crop-weight w-full p-1 border rounded text-sm" min="0" step="0.01">
+                                </div>
+                                <div>
+                                    <label class="text-xs urdu-text">ریٹ</label>
+                                    <input type="number" class="crop-rate w-full p-1 border rounded text-sm" min="0" step="0.01">
+                                </div>
+                                <div>
+                                    <label class="text-xs urdu-text">کل</label>
+                                    <input type="number" class="crop-total w-full p-1 border rounded text-sm bg-gray-200" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Row Button -->
+                    <div class="flex gap-2">
+                        <button type="button" id="addEntryRowBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 urdu-text">
+                            ➕ نئی قطار شامل کریں
+                        </button>
+                        <button type="button" id="removeEntryRowBtn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 urdu-text">
+                            ➖ آخری قطار ہٹائیں
+                        </button>
+                    </div>
+
+                    <!-- Total Amount Display -->
+                    <div class="bg-gray-100 dark-mode-bg-gray-700 p-4 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg urdu-text text-gray-700 dark-mode-text-gray-200">کل رقم:</span>
+                            <span id="totalAmountDisplay" class="font-bold text-2xl text-green-600">0</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-200 urdu-text">
+                        💾 محفوظ کریں
+                    </button>
+                </form>
+            </div>
+        </div>
+                <!-- Parties Tab -->
+        <div id="parties-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Party List -->
+                <div class="lg:col-span-2 bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">تمام پارٹیز</h3>
+                    <div id="partiesList" class="space-y-3"></div>
+                </div>
+
+                <!-- Add Party -->
+                <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">نیا پارٹی شامل کریں</h3>
+                    <form id="addPartyForm" class="space-y-3">
+                        <input type="text" id="partyNameInput" placeholder="پارٹی کا نام" required class="w-full p-3 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                        <input type="tel" id="partyPhoneInput" placeholder="فون نمبر" class="w-full p-3 border border-gray-300 rounded-lg dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                        <textarea id="partyAddressInput" placeholder="پتہ" rows="2" class="w-full p-3 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white"></textarea>
+                        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg urdu-text hover:bg-green-700">شامل کریں</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Report Controls -->
+                <div class="bg-white dark-mode rounded-lg shadow-lg p-6 space-y-4 border border-gray-200">
+                    <h3 class="text-xl font-bold text-green-700 dark-mode-text-green-400 urdu-text">رپورٹ منتخب کریں</h3>
+                    
+                    <div class="border border-gray-200 p-4 rounded-lg">
+                        <label class="font-semibold urdu-text">📅 روزنامچہ</label>
+                        <div class="flex items-center gap-2 mt-2">
+                            <input type="date" id="dailyDate" class="p-2 border border-gray-300 rounded-lg flex-grow dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                            <button data-report-type="daily" class="generate-report-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 urdu-text">دیکھیں</button>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 p-4 rounded-lg">
+                        <label class="font-semibold urdu-text">🗓️ ماہانہ خلاصہ</label>
+                        <div class="flex items-center gap-2 mt-2">
+                            <input type="month" id="monthlyDate" class="p-2 border border-gray-300 rounded-lg flex-grow dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                            <button data-report-type="monthly" class="generate-report-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 urdu-text">دیکھیں</button>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 p-4 rounded-lg">
+                        <label class="font-semibold urdu-text">📆 سالانہ خلاصہ</label>
+                        <div class="flex items-center gap-2 mt-2">
+                            <input type="number" id="yearlyDate" placeholder="سال درج کریں" class="p-2 border border-gray-300 rounded-lg flex-grow dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                            <button data-report-type="yearly" class="generate-report-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 urdu-text">دیکھیں</button>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 p-4 rounded-lg">
+                        <label class="font-semibold urdu-text">🧾 کھاتہ (لیجر)</label>
+                        <div class="space-y-2 mt-2 custom-dropdown-container">
+                            <input type="text" id="ledgerAccountInput" placeholder="اکاؤنٹ سرچ کریں..." autocomplete="off" 
+                                class="w-full p-2 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                            <input type="hidden" id="ledgerAccount">
+                            <div id="ledgerAccountDropdown" class="custom-dropdown-options custom-scroll"></div>
+                            
+                            <div class="flex gap-2 mt-2">
+                                <input type="date" id="ledgerStartDate" class="p-2 border border-gray-300 rounded-lg w-1/2 dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                                <input type="date" id="ledgerEndDate" class="p-2 border border-gray-300 rounded-lg w-1/2 dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                            </div>
+                            <button data-report-type="ledger" class="generate-report-btn w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 urdu-text">کھاتہ دیکھیں</button>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 p-4 rounded-lg">
+                        <label class="font-semibold urdu-text">📝 پارٹی کھاتہ</label>
+                        <div class="space-y-2 mt-2">
+                            <select id="partyLedgerSelect" class="w-full p-2 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white"></select>
+                            <button data-report-type="party-ledger" class="generate-report-btn w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 urdu-text">پارٹی کھاتہ دیکھیں</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Display -->
+                <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                    <div id="report-display-area" class="hidden">
+                        <div class="flex justify-between items-center mb-4 no-print gap-2">
+                            <h3 id="reportTitle" class="text-xl font-bold text-green-700 dark-mode-text-green-400 urdu-text">رپورٹ</h3>
+                            <div class="flex gap-2">
+                                <button id="exportExcelBtn" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-sm urdu-text">📊 Excel</button>
+                                <button id="printReportBtn" class="bg-gray-700 text-white px-3 py-2 rounded-lg hover:bg-gray-800 text-sm urdu-text">📄 پرنٹ</button>
+                            </div>
+                        </div>
+                        <div id="reportContent" class="overflow-x-auto custom-scroll"></div>
+                    </div>
+                    <div id="report-placeholder" class="text-center text-gray-500 py-20">
+                        <p class="urdu-text">رپورٹ دیکھنے کے لیے بائیں جانب سے آپشن منتخب کریں۔</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab (UPDATED) -->
+        <div id="settings-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Account Management -->
+                <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">اکاؤنٹس کا انتظام</h3>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="newAccountName" placeholder="نیا اکاؤنٹ" class="flex-grow p-2 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                        <button id="addAccountBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 urdu-text">شامل</button>
+                    </div>
+                    <div id="accountsTree" class="space-y-2 p-2 border border-gray-300 rounded-lg bg-gray-50 h-96 overflow-y-auto custom-scroll"></div>
+                </div>
+
+                <!-- Other Settings -->
+                <div class="space-y-6">
+                    <!-- Payment Type Visibility Setting (NEW) -->
+                    <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                        <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">ادائیگی کی قسم کی ترتیبات</h3>
+                        <div class="flex items-center justify-between p-3 bg-gray-100 dark-mode-bg-gray-700 rounded-lg">
+                            <span class="urdu-text text-gray-700 dark-mode-text-gray-200">نقد/اُدھار آپشن دکھائیں</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="showPaymentTypeToggle" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-600 dark-mode-text-gray-400 mt-2 urdu-text">
+                            اس آپشن کو بند کرنے سے انٹری فارم میں نقد/اُدھار کا انتخاب چھپ جائے گا۔
+                        </p>
+                    </div>
+
+                    <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                        <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">فونٹ کی ترتیبات</h3>
+                        <p class="text-sm text-gray-600 mb-4 urdu-text">اپنی پسند کا فونٹ منتخب کریں۔</p>
+                        <div class="flex gap-2">
+                            <label class="flex-grow bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer urdu-text">
+                                📂 فونٹ اپ لوڈ
+                                <input type="file" id="fontUploader" accept=".ttf,.otf,.woff,.woff2" class="hidden">
+                            </label>
+                            <button id="resetFontBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 urdu-text">ڈیفالٹ</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                        <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">ڈیٹا مینجمنٹ</h3>
+                        <div class="flex flex-col space-y-3">
+                            <button id="backupDataBtn" class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 urdu-text">💾 بیک اپ ڈاؤن لوڈ</button>
+                            <label class="w-full bg-purple-600 text-white text-center px-6 py-3 rounded-lg hover:bg-purple-700 cursor-pointer urdu-text">
+                                📂 بیک اپ بحال کریں
+                                <input type="file" id="restoreDataInput" accept=".json" class="hidden">
+                            </label>
+                            <button id="clearAllDataBtn" class="w-full bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 urdu-text">🗑️ تمام ڈیٹا صاف کریں</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark-mode rounded-lg shadow-lg p-6 border border-gray-200">
+                        <h3 class="text-xl font-bold mb-4 text-green-700 dark-mode-text-green-400 urdu-text">ایپ کی معلومات</h3>
+                        <p class="text-sm text-gray-600 mb-2 urdu-text">ورژن: 2.2.0 (Enhanced)</p>
+                        <p class="text-sm text-gray-600 urdu-text">یہ ایک Progressive Web App ہے جو آف لائن بھی کام کرتی ہے۔</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <!-- Add Sub-Account Modal -->
+        <div id="addSubAccountModal" class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center no-print z-50">
+            <div class="bg-white dark-mode p-6 rounded-lg shadow-xl w-11/12 md:w-1/3 border border-gray-200">
+                <h4 class="text-lg font-bold mb-4 dark-mode-text-gray-200 urdu-text">نیا سب-اکاؤنٹ شامل کریں</h4>
+                <input type="hidden" id="parentIdInput">
+                <input type="text" id="subAccountNameInput" class="w-full p-2 border border-gray-300 rounded-lg mb-4 urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white" placeholder="سب-اکاؤنٹ کا نام">
+                <div class="flex justify-end gap-2">
+                    <button id="cancelSubAccountBtn" class="bg-gray-300 dark-mode-bg-gray-600 px-4 py-2 rounded-lg urdu-text">منسوخ</button>
+                    <button id="saveSubAccountBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg urdu-text">محفوظ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Reminder Modal -->
+        <div id="addReminderModal" class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center no-print z-50">
+            <div class="bg-white dark-mode p-6 rounded-lg shadow-xl w-11/12 md:w-1/2 border border-gray-200">
+                <h4 class="text-lg font-bold mb-4 dark-mode-text-gray-200 urdu-text">نئی یاد دہانی شامل کریں</h4>
+                <form id="reminderForm" class="space-y-3">
+                    <input type="text" id="reminderTitle" placeholder="عنوان" required class="w-full p-2 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                    <textarea id="reminderDescription" placeholder="تفصیل" rows="2" class="w-full p-2 border border-gray-300 rounded-lg urdu-text dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white"></textarea>
+                    <input type="date" id="reminderDate" required class="w-full p-2 border border-gray-300 rounded-lg dark-mode-bg-gray-700 dark-mode-border-gray-600 bg-white">
+                    <div class="flex justify-end gap-2">
+                        <button type="button" id="cancelReminderBtn" class="bg-gray-300 dark-mode-bg-gray-600 px-4 py-2 rounded-lg urdu-text">منسوخ</button>
+                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg urdu-text">محفوظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Entry Modal (NEW) -->
+        <div id="editEntryModal" class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center no-print z-50">
+            <div class="bg-white dark-mode p-6 rounded-lg shadow-xl w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto border border-gray-200">
+                <h4 class="text-lg font-bold mb-4 dark-mode-text-gray-200 urdu-text">اندراج میں ترمیم کریں</h4>
+                <form id="editEntryForm" class="space-y-4">
+                    <input type="hidden" id="editEntryId">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2 urdu-text">تاریخ</label>
+                            <input type="date" id="editEntryDate" required class="w-full p-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2 urdu-text">رقم</label>
+                            <input type="number" id="editEntryAmount" required min="0" step="0.01" class="w-full p-2 border rounded-lg">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2 urdu-text">تفصیل</label>
+                        <textarea id="editEntryDescription" rows="3" class="w-full p-2 border rounded-lg urdu-text"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" id="cancelEditEntryBtn" class="bg-gray-300 dark-mode-bg-gray-600 px-4 py-2 rounded-lg urdu-text">منسوخ</button>
+                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg urdu-text">محفوظ کریں</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Invoice Modal -->
+        <div id="invoiceModal" class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center no-print z-50">
+            <div class="bg-white dark-mode p-6 rounded-lg shadow-xl w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto border border-gray-200">
+                <div class="flex justify-between items-center mb-4 no-print">
+                    <h4 class="text-lg font-bold dark-mode-text-gray-200 urdu-text">انوائس</h4>
+                    <div class="flex gap-2">
+                        <button id="printInvoiceBtn" class="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm urdu-text">پرنٹ</button>
+                        <button id="closeInvoiceBtn" class="bg-gray-300 dark-mode-bg-gray-600 px-3 py-1 rounded-lg text-sm urdu-text">بند کریں</button>
+                    </div>
+                </div>
+                <div id="invoiceContent" class="print-area"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+        <script>
+    const FarmApp = {
+        // Properties
+        DB_KEY: 'farmManagementDataV3',
+        CASH_ACCOUNT_ID: -1,
+        data: {},
+        ui: {},
+        charts: {},
+        entryRowCounter: 1,
+
+        // Initialization
+        init() {
+            this.cacheUI();
+            this.loadData();
+            this.addEventListeners();
+            this.setDefaultDates();
+            this.renderAccountsTree();
+            this.initSearchableDropdowns();
+            this.initMultipleEntryRows();
+            this.initPWA();
+            this.loadDarkMode();
+            this.applyPaymentTypeVisibility();
+            this.updateDashboard();
+            
+            if (this.data.settings.customFont) {
+                this.applyFont(this.data.settings.customFont.data, this.data.settings.customFont.name);
+            }
+        },
+
+        cacheUI() {
+            this.ui = {
+                // Navigation
+                navTabs: document.getElementById('nav-tabs'),
+                tabContents: document.querySelectorAll('.tab-content'),
+                
+                // Dashboard
+                todayIncome: document.getElementById('todayIncome'),
+                todayExpense: document.getElementById('todayExpense'),
+                totalBalance: document.getElementById('totalBalance'),
+                totalCredit: document.getElementById('totalCredit'),
+                recentTransactions: document.getElementById('recentTransactions'),
+                monthlyChart: document.getElementById('monthlyChart'),
+                remindersList: document.getElementById('remindersList'),
+                addReminderBtn: document.getElementById('addReminderBtn'),
+                
+                // Entry Form
+                entryForm: document.getElementById('entryForm'),
+                entryDate: document.getElementById('entryDate'),
+                entryType: document.getElementById('entryType'),
+                incomeBtn: document.getElementById('incomeBtn'),
+                expenseBtn: document.getElementById('expenseBtn'),
+                cashPaymentBtn: document.getElementById('cashPaymentBtn'),
+                creditPaymentBtn: document.getElementById('creditPaymentBtn'),
+                paymentType: document.getElementById('paymentType'),
+                paymentTypeContainer: document.getElementById('paymentTypeContainer'),
+                creditFields: document.getElementById('creditFields'),
+                creditParty: document.getElementById('creditParty'),
+                newPartyName: document.getElementById('newPartyName'),
+                creditDueDate: document.getElementById('creditDueDate'),
+                multipleEntriesContainer: document.getElementById('multipleEntriesContainer'),
+                addEntryRowBtn: document.getElementById('addEntryRowBtn'),
+                removeEntryRowBtn: document.getElementById('removeEntryRowBtn'),
+                totalAmountDisplay: document.getElementById('totalAmountDisplay'),
+                
+                // Parties
+                partiesList: document.getElementById('partiesList'),
+                addPartyForm: document.getElementById('addPartyForm'),
+                partyNameInput: document.getElementById('partyNameInput'),
+                partyPhoneInput: document.getElementById('partyPhoneInput'),
+                partyAddressInput: document.getElementById('partyAddressInput'),
+                
+                // Reports
+                reportDisplayArea: document.getElementById('report-display-area'),
+                reportPlaceholder: document.getElementById('report-placeholder'),
+                reportTitle: document.getElementById('reportTitle'),
+                reportContent: document.getElementById('reportContent'),
+                dailyDate: document.getElementById('dailyDate'),
+                monthlyDate: document.getElementById('monthlyDate'),
+                yearlyDate: document.getElementById('yearlyDate'),
+                ledgerAccount: document.getElementById('ledgerAccount'),
+                ledgerAccountInput: document.getElementById('ledgerAccountInput'),
+                ledgerAccountDropdown: document.getElementById('ledgerAccountDropdown'),
+                ledgerStartDate: document.getElementById('ledgerStartDate'),
+                ledgerEndDate: document.getElementById('ledgerEndDate'),
+                partyLedgerSelect: document.getElementById('partyLedgerSelect'),
+                printReportBtn: document.getElementById('printReportBtn'),
+                exportExcelBtn: document.getElementById('exportExcelBtn'),
+                
+                // Settings
+                newAccountName: document.getElementById('newAccountName'),
+                addAccountBtn: document.getElementById('addAccountBtn'),
+                accountsTree: document.getElementById('accountsTree'),
+                showPaymentTypeToggle: document.getElementById('showPaymentTypeToggle'),
+                fontUploader: document.getElementById('fontUploader'),
+                resetFontBtn: document.getElementById('resetFontBtn'),
+                backupDataBtn: document.getElementById('backupDataBtn'),
+                restoreDataInput: document.getElementById('restoreDataInput'),
+                clearAllDataBtn: document.getElementById('clearAllDataBtn'),
+                
+                // Modals
+                addSubAccountModal: document.getElementById('addSubAccountModal'),
+                parentIdInput: document.getElementById('parentIdInput'),
+                subAccountNameInput: document.getElementById('subAccountNameInput'),
+                saveSubAccountBtn: document.getElementById('saveSubAccountBtn'),
+                cancelSubAccountBtn: document.getElementById('cancelSubAccountBtn'),
+                addReminderModal: document.getElementById('addReminderModal'),
+                reminderForm: document.getElementById('reminderForm'),
+                reminderTitle: document.getElementById('reminderTitle'),
+                reminderDescription: document.getElementById('reminderDescription'),
+                reminderDate: document.getElementById('reminderDate'),
+                cancelReminderBtn: document.getElementById('cancelReminderBtn'),
+                editEntryModal: document.getElementById('editEntryModal'),
+                editEntryForm: document.getElementById('editEntryForm'),
+                editEntryId: document.getElementById('editEntryId'),
+                editEntryDate: document.getElementById('editEntryDate'),
+                editEntryAmount: document.getElementById('editEntryAmount'),
+                editEntryDescription: document.getElementById('editEntryDescription'),
+                cancelEditEntryBtn: document.getElementById('cancelEditEntryBtn'),
+                invoiceModal: document.getElementById('invoiceModal'),
+                invoiceContent: document.getElementById('invoiceContent'),
+                printInvoiceBtn: document.getElementById('printInvoiceBtn'),
+                closeInvoiceBtn: document.getElementById('closeInvoiceBtn'),
+                
+                // Other
+                darkModeToggle: document.getElementById('darkModeToggle'),
+                darkModeIcon: document.getElementById('darkModeIcon'),
+                installBtn: document.getElementById('installBtn'),
+                toastContainer: document.getElementById('toast-container')
+            };
+        },
+
+        // --- MULTIPLE ENTRY ROWS LOGIC ---
+        initMultipleEntryRows() {
+            // Initialize first row
+            this.setupEntryRow(0);
+            this.calculateTotalAmount();
+        },
+
+        setupEntryRow(rowId) {
+            const row = document.querySelector(`.entry-row[data-row-id="${rowId}"]`);
+            if (!row) return;
+
+            const inputEl = row.querySelector('.entry-account-input');
+            const dropdownEl = row.querySelector('.entry-account-dropdown');
+            const hiddenIdEl = row.querySelector('.entry-account-id');
+            const amountEl = row.querySelector('.entry-amount');
+            const cropFieldsRow = row.querySelector('.crop-fields-row');
+            const cropWeight = row.querySelector('.crop-weight');
+            const cropRate = row.querySelector('.crop-rate');
+            const cropTotal = row.querySelector('.crop-total');
+
+            // Setup account dropdown for this row
+            this.setupAccountDropdownForRow(inputEl, dropdownEl, hiddenIdEl, cropFieldsRow);
+
+            // Amount change listener
+            amountEl.addEventListener('input', () => this.calculateTotalAmount());
+
+            // Crop calculation
+            if (cropWeight && cropRate && cropTotal) {
+                cropWeight.addEventListener('input', () => {
+                    const weight = parseFloat(cropWeight.value) || 0;
+                    const rate = parseFloat(cropRate.value) || 0;
+                    const total = weight * rate;
+                    if (total > 0) {
+                        cropTotal.value = total.toFixed(2);
+                        amountEl.value = total.toFixed(2);
+                        this.calculateTotalAmount();
+                    }
+                });
+                cropRate.addEventListener('input', () => {
+                    const weight = parseFloat(cropWeight.value) || 0;
+                    const rate = parseFloat(cropRate.value) || 0;
+                    const total = weight * rate;
+                    if (total > 0) {
+                        cropTotal.value = total.toFixed(2);
+                        amountEl.value = total.toFixed(2);
+                        this.calculateTotalAmount();
+                    }
+                });
+            }
+        },
+
+        setupAccountDropdownForRow(inputEl, listEl, hiddenIdInput, cropFieldsRow) {
+            const flatAccounts = [];
+            const traverse = (acc, level) => {
+                flatAccounts.push({ id: acc.id, name: acc.name, level: level });
+                acc.children.forEach(child => traverse(child, level + 1));
+            };
+            this.data.accounts.forEach(acc => traverse(acc, 0));
+
+            const renderOptions = (filterText = '') => {
+                listEl.innerHTML = '';
+                flatAccounts.forEach(acc => {
+                    if (acc.name.includes(filterText)) {
+                        const div = document.createElement('div');
+                        div.className = 'custom-dropdown-option urdu-text';
+                        div.style.paddingRight = (acc.level * 20) + 'px';
+                        div.textContent = acc.name;
+                        div.onclick = () => {
+                            inputEl.value = acc.name;
+                            hiddenIdInput.value = acc.id;
+                            listEl.classList.remove('show');
+                            // Show crop fields if "فصل" selected
+                            if (acc.name === 'فصل' && cropFieldsRow) {
+                                cropFieldsRow.classList.remove('hidden');
+                            } else if (cropFieldsRow) {
+                                cropFieldsRow.classList.add('hidden');
+                            }
+                        };
+                        listEl.appendChild(div);
+                    }
+                });
+            };
+
+            renderOptions();
+
+            inputEl.addEventListener('input', (e) => {
+                renderOptions(e.target.value);
+                listEl.classList.add('show');
+            });
+
+            inputEl.addEventListener('focus', () => {
+                renderOptions(inputEl.value);
+                listEl.classList.add('show');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!inputEl.contains(e.target) && !listEl.contains(e.target)) {
+                    listEl.classList.remove('show');
+                }
+            });
+        },
+
+        addEntryRow() {
+            const rowId = this.entryRowCounter++;
+            const newRow = document.createElement('div');
+            newRow.className = 'entry-row';
+            newRow.setAttribute('data-row-id', rowId);
+            newRow.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div class="custom-dropdown-container">
+                        <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">اکاؤنٹ ہیڈ</label>
+                        <input type="text" class="entry-account-input w-full p-2 border border-gray-300 rounded-lg urdu-text" placeholder="مثال: فصل، اسٹور..." autocomplete="off">
+                        <input type="hidden" class="entry-account-id" required>
+                        <div class="entry-account-dropdown custom-dropdown-options custom-scroll"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">رقم</label>
+                        <input type="number" class="entry-amount w-full p-2 border border-gray-300 rounded-lg" required min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark-mode-text-gray-300 mb-2 urdu-text">تفصیل</label>
+                        <input type="text" class="entry-desc w-full p-2 border border-gray-300 rounded-lg urdu-text">
+                    </div>
+                </div>
+                <div class="crop-fields-row hidden grid grid-cols-3 gap-3 mt-2 p-2 bg-green-100 dark-mode-bg-green-900 rounded">
+                    <div>
+                        <label class="text-xs urdu-text">وزن (من/کلو)</label>
+                        <input type="number" class="crop-weight w-full p-1 border rounded text-sm" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label class="text-xs urdu-text">ریٹ</label>
+                        <input type="number" class="crop-rate w-full p-1 border rounded text-sm" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label class="text-xs urdu-text">کل</label>
+                        <input type="number" class="crop-total w-full p-1 border rounded text-sm bg-gray-200" readonly>
+                    </div>
+                </div>
+            `;
+            this.ui.multipleEntriesContainer.appendChild(newRow);
+            this.setupEntryRow(rowId);
+            this.showToast('نئی قطار شامل کی گئی۔', 'success');
+        },
+
+        removeEntryRow() {
+            const rows = this.ui.multipleEntriesContainer.querySelectorAll('.entry-row');
+            if (rows.length > 1) {
+                rows[rows.length - 1].remove();
+                this.calculateTotalAmount();
+                this.showToast('قطار ہٹائی گئی۔', 'info');
+            } else {
+                this.showToast('کم از کم ایک قطار ضروری ہے۔', 'warning');
+            }
+        },
+
+        calculateTotalAmount() {
+            const amounts = Array.from(document.querySelectorAll('.entry-amount'))
+                .map(input => parseFloat(input.value) || 0);
+            const total = amounts.reduce((sum, val) => sum + val, 0);
+            this.ui.totalAmountDisplay.textContent = total.toFixed(2);
+        },
+
+        collectEntryRowsData() {
+            const rows = document.querySelectorAll('.entry-row');
+            const entries = [];
+            
+            rows.forEach(row => {
+                const accountId = parseInt(row.querySelector('.entry-account-id').value);
+                const amount = parseFloat(row.querySelector('.entry-amount').value);
+                const description = row.querySelector('.entry-desc').value;
+                
+                if (accountId && amount > 0) {
+                    const entry = { accountId, amount, description };
+                    
+                    // Check for crop details
+                    const cropWeight = row.querySelector('.crop-weight');
+                    const cropRate = row.querySelector('.crop-rate');
+                    if (cropWeight && cropRate && cropWeight.value && cropRate.value) {
+                        entry.cropDetails = {
+                            weight: parseFloat(cropWeight.value),
+                            rate: parseFloat(cropRate.value)
+                        };
+                    }
+                    
+                    entries.push(entry);
+                }
+            });
+            
+            return entries;
+        },
+
+        // --- SEARCHABLE DROPDOWN LOGIC ---
+        initSearchableDropdowns() {
+            this.setupAccountDropdown(
+                this.ui.ledgerAccountInput,
+                this.ui.ledgerAccountDropdown,
+                this.ui.ledgerAccount
+            );
+        },
+
+        setupAccountDropdown(inputEl, listEl, hiddenIdInput, onSelectCallback) {
+            const flatAccounts = [];
+            const traverse = (acc, level) => {
+                flatAccounts.push({ id: acc.id, name: acc.name, level: level });
+                acc.children.forEach(child => traverse(child, level + 1));
+            };
+            this.data.accounts.forEach(acc => traverse(acc, 0));
+
+            const renderOptions = (filterText = '') => {
+                listEl.innerHTML = '';
+                flatAccounts.forEach(acc => {
+                    if (acc.name.includes(filterText)) {
+                        const div = document.createElement('div');
+                        div.className = 'custom-dropdown-option urdu-text';
+                        div.style.paddingRight = (acc.level * 20) + 'px';
+                        div.textContent = acc.name;
+                        div.onclick = () => {
+                            inputEl.value = acc.name;
+                            hiddenIdInput.value = acc.id;
+                            listEl.classList.remove('show');
+                            if (onSelectCallback) onSelectCallback();
+                        };
+                        listEl.appendChild(div);
+                    }
+                });
+            };
+
+            renderOptions();
+
+            inputEl.addEventListener('input', (e) => {
+                renderOptions(e.target.value);
+                listEl.classList.add('show');
+            });
+
+            inputEl.addEventListener('focus', () => {
+                renderOptions(inputEl.value);
+                listEl.classList.add('show');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!inputEl.contains(e.target) && !listEl.contains(e.target)) {
+                    listEl.classList.remove('show');
+                }
+            });
+        },
+
+        addEventListeners() {
+            // Tab Navigation
+            this.ui.navTabs.addEventListener('click', e => {
+                if (e.target.classList.contains('tab-btn')) {
+                    this.showTab(e.target.dataset.tab);
+                }
+            });
+
+            // Entry Form
+            this.ui.entryForm.addEventListener('submit', e => {
+                e.preventDefault();
+                this.saveTransaction();
+            });
+            this.ui.incomeBtn.addEventListener('click', () => this.selectType('income'));
+            this.ui.expenseBtn.addEventListener('click', () => this.selectType('expense'));
+            this.ui.cashPaymentBtn.addEventListener('click', () => this.selectPaymentType('cash'));
+            this.ui.creditPaymentBtn.addEventListener('click', () => this.selectPaymentType('credit'));
+            this.ui.addEntryRowBtn.addEventListener('click', () => this.addEntryRow());
+            this.ui.removeEntryRowBtn.addEventListener('click', () => this.removeEntryRow());
+
+            // Parties
+            this.ui.addPartyForm.addEventListener('submit', e => {
+                e.preventDefault();
+                this.addParty();
+            });
+
+            // Reports
+            document.addEventListener('click', e => {
+                if (e.target.classList.contains('generate-report-btn')) {
+                    this.generateReport(e.target.dataset.reportType);
+                }
+            });
+            this.ui.printReportBtn.addEventListener('click', () => this.printReport());
+            this.ui.exportExcelBtn.addEventListener('click', () => this.exportToExcel());
+
+            // Settings
+            this.ui.addAccountBtn.addEventListener('click', () => this.addAccount());
+            this.ui.showPaymentTypeToggle.addEventListener('change', () => this.togglePaymentTypeVisibility());
+            this.ui.fontUploader.addEventListener('change', e => this.handleFontUpload(e));
+            this.ui.resetFontBtn.addEventListener('click', () => this.resetFont());
+            this.ui.backupDataBtn.addEventListener('click', () => this.backupData());
+            this.ui.restoreDataInput.addEventListener('change', e => this.restoreData(e));
+            this.ui.clearAllDataBtn.addEventListener('click', () => this.clearAllData());
+
+            // Account Tree
+            this.ui.accountsTree.addEventListener('click', e => {
+                if (e.target.dataset.action === 'add-sub') {
+                    this.openSubAccountModal(parseInt(e.target.dataset.id));
+                }
+                if (e.target.dataset.action === 'delete') {
+                    this.deleteAccount(parseInt(e.target.dataset.id));
+                }
+            });
+
+            // Modals
+            this.ui.saveSubAccountBtn.addEventListener('click', () => this.saveSubAccount());
+            this.ui.cancelSubAccountBtn.addEventListener('click', () => this.closeModal('addSubAccountModal'));
+            this.ui.addReminderBtn.addEventListener('click', () => this.openModal('addReminderModal'));
+            this.ui.reminderForm.addEventListener('submit', e => {
+                e.preventDefault();
+                this.saveReminder();
+            });
+            this.ui.cancelReminderBtn.addEventListener('click', () => this.closeModal('addReminderModal'));
+            this.ui.editEntryForm.addEventListener('submit', e => {
+                e.preventDefault();
+                this.updateEntry();
+            });
+            this.ui.cancelEditEntryBtn.addEventListener('click', () => this.closeModal('editEntryModal'));
+            this.ui.closeInvoiceBtn.addEventListener('click', () => this.closeModal('invoiceModal'));
+            this.ui.printInvoiceBtn.addEventListener('click', () => window.print());
+
+            // Dark Mode
+            this.ui.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
+
+            // Reminders List
+            this.ui.remindersList.addEventListener('click', e => {
+                if (e.target.dataset.action === 'delete-reminder') {
+                    this.deleteReminder(parseInt(e.target.dataset.id));
+                }
+            });
+
+            // Recent Transactions (Edit/Delete)
+            this.ui.recentTransactions.addEventListener('click', e => {
+                if (e.target.dataset.action === 'edit-entry') {
+                    this.openEditEntryModal(parseInt(e.target.dataset.id));
+                }
+                if (e.target.dataset.action === 'delete-entry') {
+                    this.deleteEntry(parseInt(e.target.dataset.id));
+                }
+            });
+
+            // Parties List
+            this.ui.partiesList.addEventListener('click', e => {
+                if (e.target.dataset.action === 'delete-party') {
+                    this.deleteParty(parseInt(e.target.dataset.id));
+                }
+                if (e.target.dataset.action === 'view-ledger') {
+                    this.showPartyLedger(parseInt(e.target.dataset.id));
+                }
+                if (e.target.dataset.action === 'generate-invoice') {
+                    this.generateInvoice(parseInt(e.target.dataset.id));
+                }
+            });
+        },
+
+        // Data Management
+        loadData() {
+            const stored = localStorage.getItem(this.DB_KEY);
+            const initialData = {
+                accounts: [
+                    { id: 1, name: 'فصل', children: [] },
+                    { id: 2, name: 'اسٹور', children: [] },
+                    { id: 3, name: 'واجب الوصول', children: [] },
+                    { id: 4, name: 'صدر دفتر', children: [] },
+                    { id: 5, name: 'بینک', children: [] },
+                    { id: 6, name: 'کار/موٹر', children: [] },
+                    { id: 7, name: 'مرمتی', children: [] },
+                    { id: 8, name: 'متفرق خرچہ', children: [] },
+                    { id: 9, name: 'بجلی بل', children: [] }
+                ],
+                transactions: [],
+                parties: [],
+                reminders: [],
+                settings: {
+                    cashInHand: 'روکڑ',
+                    customFont: null,
+                    nextAccountId: 10,
+                    nextPartyId: 1,
+                    nextReminderId: 1,
+                    darkMode: false,
+                    showPaymentType: true,
+                    farmName: 'میرا فارم',
+                    ownerName: '',
+                    phone: ''
+                }
+            };
+            this.data = stored ? JSON.parse(stored) : initialData;
+            
+            if (!this.data.parties) this.data.parties = [];
+            if (!this.data.reminders) this.data.reminders = [];
+            if (!this.data.settings.nextPartyId) this.data.settings.nextPartyId = 1;
+            if (!this.data.settings.nextReminderId) this.data.settings.nextReminderId = 1;
+            if (this.data.settings.showPaymentType === undefined) this.data.settings.showPaymentType = true;
+        },
+
+        saveData() {
+            localStorage.setItem(this.DB_KEY, JSON.stringify(this.data));
+        },
+
+        findAccount(accounts, id) {
+            for (const account of accounts) {
+                if (account.id === id) return account;
+                const found = this.findAccount(account.children, id);
+                if (found) return found;
+            }
+            return null;
+        },
+                // UI Functions
+        showTab(tabName) {
+            this.ui.tabContents.forEach(tab => tab.classList.add('hidden'));
+            this.ui.navTabs.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-green-600', 'border-green-600', 'border-b-2', 'bg-green-50');
+            });
+
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+            const activeBtn = this.ui.navTabs.querySelector(`[data-tab="${tabName}"]`);
+            activeBtn.classList.add('text-green-600', 'border-green-600', 'border-b-2', 'bg-green-50');
+
+            if (tabName === 'dashboard') this.updateDashboard();
+            if (tabName === 'parties') this.renderPartiesList();
+            if (tabName === 'reports') {
+                this.initSearchableDropdowns();
+                this.updateReportDropdowns();
+            }
+        },
+
+        showToast(message, type = 'info', duration = 3000) {
+            const toast = document.createElement('div');
+            toast.className = `toast urdu-text ${type}`;
+            toast.textContent = message;
+            this.ui.toastContainer.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, duration);
+        },
+
+        openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        },
+
+        closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        },
+
+        setDefaultDates() {
+            const today = new Date().toISOString().split('T')[0];
+            this.ui.entryDate.value = today;
+            this.ui.dailyDate.value = today;
+            this.ui.monthlyDate.value = today.substring(0, 7);
+            this.ui.yearlyDate.value = today.substring(0, 4);
+            this.ui.ledgerStartDate.value = today.substring(0, 8) + '01';
+            this.ui.ledgerEndDate.value = today;
+        },
+
+        // Payment Type Visibility
+        togglePaymentTypeVisibility() {
+            this.data.settings.showPaymentType = this.ui.showPaymentTypeToggle.checked;
+            this.saveData();
+            this.applyPaymentTypeVisibility();
+            this.showToast('ترتیبات محفوظ ہو گئیں۔', 'success');
+        },
+
+        applyPaymentTypeVisibility() {
+            if (this.data.settings.showPaymentType) {
+                this.ui.paymentTypeContainer.classList.remove('hidden');
+                this.ui.showPaymentTypeToggle.checked = true;
+            } else {
+                this.ui.paymentTypeContainer.classList.add('hidden');
+                this.ui.showPaymentTypeToggle.checked = false;
+                // Force cash payment when hidden
+                this.selectPaymentType('cash');
+            }
+        },
+
+        // Dark Mode
+        loadDarkMode() {
+            if (this.data.settings.darkMode) {
+                document.body.classList.add('dark-mode');
+                this.ui.darkModeIcon.textContent = '☀️';
+            }
+        },
+
+        toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            this.data.settings.darkMode = !this.data.settings.darkMode;
+            this.ui.darkModeIcon.textContent = this.data.settings.darkMode ? '☀️' : '🌙';
+            this.saveData();
+            if (document.getElementById('dashboard-tab').classList.contains('hidden') === false) {
+                this.updateDashboard();
+            }
+        },
+
+        // Dashboard
+        updateDashboard() {
+            const today = new Date().toISOString().split('T')[0];
+            const thisMonth = today.substring(0, 7);
+
+            const todayTxs = this.data.transactions.filter(t => t.date === today);
+            const todayIncome = todayTxs.filter(t => t.credit > 0 && t.accountId !== this.CASH_ACCOUNT_ID)
+                .reduce((sum, t) => sum + t.credit, 0);
+            const todayExpense = todayTxs.filter(t => t.debit > 0 && t.accountId !== this.CASH_ACCOUNT_ID)
+                .reduce((sum, t) => sum + t.debit, 0);
+
+            const cashTxs = this.data.transactions.filter(t => t.accountId === this.CASH_ACCOUNT_ID);
+            const totalBalance = cashTxs.reduce((sum, t) => sum + t.debit - t.credit, 0);
+
+            const totalCredit = this.data.transactions
+                .filter(t => t.paymentType === 'credit' && t.accountId !== this.CASH_ACCOUNT_ID)
+                .reduce((sum, t) => sum + (t.credit || t.debit), 0);
+
+            this.ui.todayIncome.textContent = todayIncome.toFixed(0);
+            this.ui.todayExpense.textContent = todayExpense.toFixed(0);
+            this.ui.totalBalance.textContent = totalBalance.toFixed(0);
+            this.ui.totalCredit.textContent = totalCredit.toFixed(0);
+
+            this.renderRecentTransactions();
+            this.renderMonthlyChart(thisMonth);
+            this.renderReminders();
+        },
+
+        renderRecentTransactions() {
+            const recent = this.data.transactions
+                .filter(t => t.accountId !== this.CASH_ACCOUNT_ID)
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .slice(0, 10);
+
+            this.ui.recentTransactions.innerHTML = recent.length ? recent.map(t => `
+                <div class="flex justify-between items-center p-2 border border-gray-200 dark-mode-border-gray-600 rounded">
+                    <div class="flex-1">
+                        <div class="font-semibold urdu-text text-gray-700 dark-mode-text-gray-200">${t.accountName}</div>
+                        <div class="text-xs text-gray-500 dark-mode-text-gray-400">${t.date} ${t.description ? '- ' + t.description : ''}</div>
+                    </div>
+                    <div class="text-right flex items-center gap-2">
+                        <div>
+                            <div class="font-bold ${t.debit > 0 ? 'text-red-600' : 'text-green-600'}">
+                                ${t.debit > 0 ? '-' : '+'}${(t.debit || t.credit).toFixed(0)}
+                            </div>
+                            ${t.paymentType === 'credit' ? '<span class="text-xs bg-yellow-200 px-2 py-0.5 rounded urdu-text text-yellow-900">اُدھار</span>' : ''}
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <button data-action="edit-entry" data-id="${t.id}" class="text-blue-600 hover:text-blue-800 text-sm" title="ترمیم">✏️</button>
+                            <button data-action="delete-entry" data-id="${t.id}" class="text-red-600 hover:text-red-800 text-sm" title="حذف">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-center text-gray-500 dark-mode-text-gray-400 urdu-text">کوئی ٹرانزیکشن نہیں</p>';
+        },
+
+        renderMonthlyChart(month) {
+            const monthTxs = this.data.transactions.filter(t => t.date.startsWith(month));
+            const dailyData = {};
+
+            monthTxs.forEach(t => {
+                const day = t.date.split('-')[2];
+                if (!dailyData[day]) dailyData[day] = { income: 0, expense: 0 };
+                
+                if (t.credit > 0 && t.accountId !== this.CASH_ACCOUNT_ID) {
+                    dailyData[day].income += t.credit;
+                } else if (t.debit > 0 && t.accountId !== this.CASH_ACCOUNT_ID) {
+                    dailyData[day].expense += t.debit;
+                }
+            });
+
+            const days = Object.keys(dailyData).sort((a, b) => parseInt(a) - parseInt(b));
+            const incomeData = days.map(d => dailyData[d].income);
+            const expenseData = days.map(d => dailyData[d].expense);
+
+            if (this.charts.monthly) this.charts.monthly.destroy();
+
+            const ctx = this.ui.monthlyChart.getContext('2d');
+            const isDark = document.body.classList.contains('dark-mode');
+            const textColor = isDark ? '#e2e8f0' : '#374151';
+            const gridColor = isDark ? '#4a5568' : '#e5e7eb';
+
+            this.charts.monthly = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: days,
+                    datasets: [
+                        {
+                            label: 'آمدنی',
+                            data: incomeData,
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            borderColor: 'rgb(16, 185, 129)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'خرچہ',
+                            data: expenseData,
+                            backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                            borderColor: 'rgb(239, 68, 68)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { 
+                            display: true, 
+                            position: 'top',
+                            labels: { color: textColor }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: textColor }
+                        }
+                    }
+                }
+            });
+        },
+
+        renderReminders() {
+            const today = new Date().toISOString().split('T')[0];
+            const upcoming = this.data.reminders
+                .filter(r => r.date >= today)
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 5);
+
+            this.ui.remindersList.innerHTML = upcoming.length ? upcoming.map(r => {
+                const daysLeft = Math.ceil((new Date(r.date) - new Date(today)) / (1000 * 60 * 60 * 24));
+                return `
+                    <div class="flex justify-between items-center p-3 border border-gray-200 dark-mode-border-gray-600 rounded-lg ${daysLeft <= 3 ? 'bg-red-50 dark-mode-bg-red-900' : 'bg-gray-50 dark-mode-bg-gray-700'}">
+                        <div>
+                            <div class="font-semibold urdu-text text-gray-700 dark-mode-text-gray-200">${r.title}</div>
+                            <div class="text-xs text-gray-600 dark-mode-text-gray-400">${r.description || ''}</div>
+                            <div class="text-xs mt-1 ${daysLeft <= 3 ? 'text-red-600 font-bold' : 'text-gray-500 dark-mode-text-gray-400'}">
+                                ${r.date} (${daysLeft === 0 ? 'آج' : daysLeft + ' دن باقی'})
+                            </div>
+                        </div>
+                        <button data-action="delete-reminder" data-id="${r.id}" class="text-red-500 hover:text-red-700 text-xl">🗑️</button>
+                    </div>
+                `;
+            }).join('') : '<p class="text-center text-gray-500 dark-mode-text-gray-400 urdu-text">کوئی یاد دہانی نہیں</p>';
+        },
+
+        saveReminder() {
+            const reminder = {
+                id: this.data.settings.nextReminderId++,
+                title: this.ui.reminderTitle.value,
+                description: this.ui.reminderDescription.value,
+                date: this.ui.reminderDate.value,
+                timestamp: new Date().toISOString()
+            };
+
+            this.data.reminders.push(reminder);
+            this.saveData();
+            this.ui.reminderForm.reset();
+            this.closeModal('addReminderModal');
+            this.renderReminders();
+            this.showToast('یاد دہانی شامل کر دی گئی۔', 'success');
+        },
+
+        deleteReminder(id) {
+            if (confirm('کیا آپ یہ یاد دہانی حذف کرنا چاہتے ہیں؟')) {
+                this.data.reminders = this.data.reminders.filter(r => r.id !== id);
+                this.saveData();
+                this.renderReminders();
+                this.showToast('یاد دہانی حذف کر دی گئی۔', 'info');
+            }
+        },
+
+        // Entry Form Functions
+        selectType(type) {
+            this.ui.entryType.value = type;
+            if (type === 'income') {
+                this.ui.incomeBtn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                this.ui.incomeBtn.classList.remove('bg-green-50', 'border-green-300');
+                this.ui.expenseBtn.classList.remove('bg-red-500', 'text-white', 'border-red-600');
+                this.ui.expenseBtn.classList.add('bg-red-50', 'border-red-300');
+            } else {
+                this.ui.expenseBtn.classList.add('bg-red-500', 'text-white', 'border-red-600');
+                this.ui.expenseBtn.classList.remove('bg-red-50', 'border-red-300');
+                this.ui.incomeBtn.classList.remove('bg-green-500', 'text-white', 'border-green-600');
+                this.ui.incomeBtn.classList.add('bg-green-50', 'border-green-300');
+            }
+        },
+
+        selectPaymentType(type) {
+            this.ui.paymentType.value = type;
+            if (type === 'cash') {
+                this.ui.cashPaymentBtn.classList.add('bg-blue-500', 'text-white', 'border-blue-600');
+                this.ui.cashPaymentBtn.classList.remove('bg-blue-50');
+                this.ui.creditPaymentBtn.classList.remove('bg-yellow-500', 'text-white', 'border-yellow-600');
+                this.ui.creditPaymentBtn.classList.add('bg-yellow-50');
+                this.ui.creditFields.classList.add('hidden');
+            } else {
+                this.ui.creditPaymentBtn.classList.add('bg-yellow-500', 'text-white', 'border-yellow-600');
+                this.ui.creditPaymentBtn.classList.remove('bg-yellow-50');
+                this.ui.cashPaymentBtn.classList.remove('bg-blue-500', 'text-white', 'border-blue-600');
+                this.ui.cashPaymentBtn.classList.add('bg-blue-50');
+                this.ui.creditFields.classList.remove('hidden');
+                this.updateCreditPartyDropdown();
+            }
+        },
+
+        saveTransaction() {
+            const type = this.ui.entryType.value;
+            const paymentType = this.data.settings.showPaymentType ? this.ui.paymentType.value : 'cash';
+            const entries = this.collectEntryRowsData();
+
+            if (!type || entries.length === 0) {
+                this.showToast('براہ کرم تمام فیلڈز بھریں۔', 'error');
+                return;
+            }
+
+            // Handle credit party
+            let partyId = null;
+            if (paymentType === 'credit') {
+                const selectedPartyId = parseInt(this.ui.creditParty.value);
+                const newPartyName = this.ui.newPartyName.value.trim();
+
+                if (selectedPartyId) {
+                    partyId = selectedPartyId;
+                } else if (newPartyName) {
+                    const newParty = {
+                        id: this.data.settings.nextPartyId++,
+                        name: newPartyName,
+                        phone: '',
+                        address: '',
+                        timestamp: new Date().toISOString()
+                    };
+                    this.data.parties.push(newParty);
+                    partyId = newParty.id;
+                } else {
+                    this.showToast('اُدھار کی صورت میں پارٹی منتخب کریں یا نیا نام درج کریں۔', 'error');
+                    return;
+                }
+            }
+
+            // Create transactions for each entry
+            entries.forEach(entry => {
+                const transaction = {
+                    id: Date.now() + Math.random(),
+                    date: this.ui.entryDate.value,
+                    type: type,
+                    accountId: entry.accountId,
+                    amount: entry.amount,
+                    description: entry.description,
+                    paymentType: paymentType,
+                    partyId: partyId,
+                    creditDueDate: paymentType === 'credit' ? this.ui.creditDueDate.value : null,
+                    cropDetails: entry.cropDetails || null,
+                    timestamp: new Date().toISOString()
+                };
+
+                const doubleEntry = this.createDoubleEntry(transaction);
+                this.data.transactions.push(...doubleEntry);
+            });
+
+            if (paymentType === 'credit' && this.ui.creditDueDate.value) {
+                const party = this.data.parties.find(p => p.id === partyId);
+                const totalAmount = entries.reduce((sum, e) => sum + e.amount, 0);
+                this.data.reminders.push({
+                    id: this.data.settings.nextReminderId++,
+                    title: `${party.name} - اُدھار کی واپسی`,
+                    description: `رقم: ${totalAmount}`,
+                    date: this.ui.creditDueDate.value,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            this.saveData();
+            this.resetEntryForm();
+            this.showToast('اندراج کامیابی سے محفوظ ہو گیا!', 'success');
+            this.updateDashboard();
+        },
+
+        resetEntryForm() {
+            this.ui.entryForm.reset();
+            // Clear all entry rows except first
+            const rows = this.ui.multipleEntriesContainer.querySelectorAll('.entry-row');
+            rows.forEach((row, index) => {
+                if (index > 0) row.remove();
+            });
+            // Reset first row
+            const firstRow = rows[0];
+            firstRow.querySelector('.entry-account-input').value = '';
+            firstRow.querySelector('.entry-account-id').value = '';
+            firstRow.querySelector('.entry-amount').value = '';
+            firstRow.querySelector('.entry-desc').value = '';
+            const cropFields = firstRow.querySelector('.crop-fields-row');
+            if (cropFields) {
+                cropFields.classList.add('hidden');
+                firstRow.querySelector('.crop-weight').value = '';
+                firstRow.querySelector('.crop-rate').value = '';
+                firstRow.querySelector('.crop-total').value = '';
+            }
+            this.ui.creditFields.classList.add('hidden');
+            this.selectPaymentType('cash');
+            this.calculateTotalAmount();
+            this.entryRowCounter = 1;
+        },
+
+        createDoubleEntry(tx) {
+            const account = this.findAccount(this.data.accounts, tx.accountId);
+            const entries = [];
+            const baseEntry = { 
+                ...tx, 
+                accountName: account.name 
+            };
+            delete baseEntry.type;
+
+            if (tx.type === 'income') {
+                entries.push({ ...baseEntry, credit: tx.amount, debit: 0 });
+                if (tx.paymentType === 'cash') {
+                    entries.push({ 
+                        ...baseEntry, 
+                        accountId: this.CASH_ACCOUNT_ID, 
+                        accountName: this.data.settings.cashInHand, 
+                        debit: tx.amount, 
+                        credit: 0 
+                    });
+                }
+            } else {
+                entries.push({ ...baseEntry, debit: tx.amount, credit: 0 });
+                if (tx.paymentType === 'cash') {
+                    entries.push({ 
+                        ...baseEntry, 
+                        accountId: this.CASH_ACCOUNT_ID, 
+                        accountName: this.data.settings.cashInHand, 
+                        credit: tx.amount, 
+                        debit: 0 
+                    });
+                }
+            }
+            return entries;
+        },
+
+        // Edit/Delete Entry Functions (NEW)
+        openEditEntryModal(entryId) {
+            const entry = this.data.transactions.find(t => t.id === entryId);
+            if (!entry) return;
+
+            this.ui.editEntryId.value = entry.id;
+            this.ui.editEntryDate.value = entry.date;
+            this.ui.editEntryAmount.value = entry.debit || entry.credit;
+            this.ui.editEntryDescription.value = entry.description || '';
+            
+            this.openModal('editEntryModal');
+        },
+
+        updateEntry() {
+            const entryId = parseFloat(this.ui.editEntryId.value);
+            const newDate = this.ui.editEntryDate.value;
+            const newAmount = parseFloat(this.ui.editEntryAmount.value);
+            const newDescription = this.ui.editEntryDescription.value;
+
+            // Find and update all related transactions (double entry)
+            const relatedTxs = this.data.transactions.filter(t => 
+                Math.abs(t.id - entryId) < 1 && t.date === this.data.transactions.find(tx => tx.id === entryId).date
+            );
+
+            relatedTxs.forEach(tx => {
+                tx.date = newDate;
+                tx.description = newDescription;
+                if (tx.debit > 0) tx.debit = newAmount;
+                if (tx.credit > 0) tx.credit = newAmount;
+                tx.amount = newAmount;
+            });
+
+            this.saveData();
+            this.closeModal('editEntryModal');
+            this.updateDashboard();
+            this.showToast('اندراج میں ترمیم ہو گئی۔', 'success');
+        },
+
+        deleteEntry(entryId) {
+            if (!confirm('کیا آپ یہ اندراج حذف کرنا چاہتے ہیں؟')) return;
+
+            const entry = this.data.transactions.find(t => t.id === entryId);
+            if (!entry) return;
+
+            // Remove all related transactions (both debit and credit sides)
+            this.data.transactions = this.data.transactions.filter(t => 
+                !(Math.abs(t.id - entryId) < 1 && t.date === entry.date)
+            );
+
+            this.saveData();
+            this.updateDashboard();
+            this.showToast('اندراج حذف ہو گئی۔', 'info');
+        },
+
+        updateCreditPartyDropdown() {
+            this.ui.creditParty.innerHTML = '<option value="">موجودہ پارٹی منتخب کریں</option>' +
+                this.data.parties.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+        },
+                // Parties Management
+        renderPartiesList() {
+            const parties = this.data.parties.sort((a, b) => a.name.localeCompare(b.name));
+            
+            this.ui.partiesList.innerHTML = parties.length ? parties.map(party => {
+                const partyTxs = this.data.transactions.filter(t => t.partyId === party.id);
+                const balance = partyTxs.reduce((sum, t) => {
+                    if (t.accountId === this.CASH_ACCOUNT_ID) return sum;
+                    return sum + (t.type === 'income' ? t.amount : -t.amount);
+                }, 0);
+
+                return `
+                    <div class="border border-gray-200 dark-mode-border-gray-600 rounded-lg p-4 hover:shadow-md transition bg-white dark-mode">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h4 class="font-bold text-lg urdu-text text-gray-700 dark-mode-text-gray-200">${party.name}</h4>
+                                ${party.phone ? `<p class="text-sm text-gray-600 dark-mode-text-gray-400">📞 ${party.phone}</p>` : ''}
+                                ${party.address ? `<p class="text-sm text-gray-600 dark-mode-text-gray-400 urdu-text">📍 ${party.address}</p>` : ''}
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-xl ${balance >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                    ${Math.abs(balance).toFixed(0)}
+                                </div>
+                                <div class="text-xs text-gray-500 dark-mode-text-gray-400 urdu-text">
+                                    ${balance >= 0 ? 'دینا ہے' : 'لینا ہے'}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            <button data-action="view-ledger" data-id="${party.id}" class="flex-1 bg-blue-600 text-white px-3 py-1 rounded text-sm urdu-text hover:bg-blue-700">کھاتہ</button>
+                            <button data-action="generate-invoice" data-id="${party.id}" class="flex-1 bg-green-600 text-white px-3 py-1 rounded text-sm urdu-text hover:bg-green-700">بل</button>
+                            <button data-action="delete-party" data-id="${party.id}" class="bg-red-600 text-white px-3 py-1 rounded text-sm urdu-text hover:bg-red-700">حذف</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') : '<p class="text-center text-gray-500 dark-mode-text-gray-400 urdu-text">کوئی پارٹی نہیں ہے</p>';
+        },
+
+        addParty() {
+            const name = this.ui.partyNameInput.value.trim();
+            if (!name) {
+                this.showToast('پارٹی کا نام درج کریں۔', 'error');
+                return;
+            }
+
+            const party = {
+                id: this.data.settings.nextPartyId++,
+                name: name,
+                phone: this.ui.partyPhoneInput.value.trim(),
+                address: this.ui.partyAddressInput.value.trim(),
+                timestamp: new Date().toISOString()
+            };
+
+            this.data.parties.push(party);
+            this.saveData();
+            this.ui.addPartyForm.reset();
+            this.renderPartiesList();
+            this.showToast('پارٹی شامل کر دی گئی۔', 'success');
+        },
+
+        deleteParty(id) {
+            const party = this.data.parties.find(p => p.id === id);
+            if (!party) return;
+
+            const txCount = this.data.transactions.filter(t => t.partyId === id).length;
+            if (txCount > 0 && !confirm(`${party.name} کے ساتھ ${txCount} ٹرانزیکشنز ہیں۔ کیا آپ یہ پارٹی حذف کرنا چاہتے ہیں؟`)) {
+                return;
+            }
+
+            this.data.parties = this.data.parties.filter(p => p.id !== id);
+            this.saveData();
+            this.renderPartiesList();
+            this.showToast('پارٹی حذف کر دی گئی۔', 'info');
+        },
+
+        showPartyLedger(partyId) {
+            this.showTab('reports');
+            const party = this.data.parties.find(p => p.id === partyId);
+            if (!party) return;
+
+            this.ui.reportDisplayArea.classList.remove('hidden');
+            this.ui.reportPlaceholder.classList.add('hidden');
+            this.ui.reportTitle.textContent = `${party.name} کا کھاتہ`;
+
+            const txs = this.data.transactions
+                .filter(t => t.partyId === partyId)
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            let balance = 0;
+            const rows = txs.map(t => {
+                const amount = t.amount || 0;
+                const debit = t.type === 'expense' ? amount : 0;
+                const credit = t.type === 'income' ? amount : 0;
+                balance += credit - debit;
+
+                return `
+                    <tr>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2">${t.date}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 urdu-text">${t.description || t.accountName}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right">${debit > 0 ? debit.toFixed(2) : '-'}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right">${credit > 0 ? credit.toFixed(2) : '-'}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right ${balance >= 0 ? 'text-green-600' : 'text-red-600'}">${Math.abs(balance).toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            this.ui.reportContent.innerHTML = `
+                <div class="mb-4 p-4 bg-gray-100 dark-mode-bg-gray-700 rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-lg urdu-text text-gray-700 dark-mode-text-gray-200">${party.name}</h4>
+                            ${party.phone ? `<p class="text-sm text-gray-600 dark-mode-text-gray-400">📞 ${party.phone}</p>` : ''}
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-600 dark-mode-text-gray-400 urdu-text">کل بیلنس</div>
+                            <div class="font-bold text-2xl ${balance >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                ${Math.abs(balance).toFixed(0)} <span class="text-sm text-gray-500 dark-mode-text-gray-400">${balance >= 0 ? 'دینا' : 'لینا'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm border-collapse">
+                        <thead><tr class="bg-gray-200 dark-mode-bg-gray-700">
+                            <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">تاریخ</th>
+                            <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">تفصیل</th>
+                            <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">ڈیبٹ</th>
+                            <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">کریڈٹ</th>
+                            <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">بیلنس</th>
+                        </tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+            `;
+        },
+
+        generateInvoice(partyId) {
+            const party = this.data.parties.find(p => p.id === partyId);
+            if (!party) return;
+
+            const txs = this.data.transactions
+                .filter(t => t.partyId === partyId && t.type === 'income')
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 20);
+
+            const total = txs.reduce((sum, t) => sum + t.amount, 0);
+
+            this.ui.invoiceContent.innerHTML = `
+                <div class="text-center mb-6">
+                    <h1 class="text-3xl font-bold text-green-700 urdu-text">${this.data.settings.farmName}</h1>
+                    <p class="text-gray-600 dark-mode-text-gray-400 urdu-text">فارم منیجمنٹ سسٹم</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-100 dark-mode-bg-gray-700 rounded">
+                    <div>
+                        <p class="font-semibold urdu-text text-gray-700 dark-mode-text-gray-200">پارٹی کا نام:</p>
+                        <p class="text-lg urdu-text text-gray-700 dark-mode-text-gray-200">${party.name}</p>
+                        ${party.phone ? `<p class="text-sm text-gray-600 dark-mode-text-gray-400">📞 ${party.phone}</p>` : ''}
+                        ${party.address ? `<p class="urdu-text text-sm text-gray-600 dark-mode-text-gray-400">📍 ${party.address}</p>` : ''}
+                    </div>
+                    <div class="text-right">
+                        <p class="font-semibold urdu-text text-gray-700 dark-mode-text-gray-200">تاریخ:</p>
+                        <p class="text-gray-700 dark-mode-text-gray-200">${new Date().toISOString().split('T')[0]}</p>
+                        <p class="font-semibold mt-2 urdu-text text-gray-700 dark-mode-text-gray-200">انوائس نمبر:</p>
+                        <p class="text-gray-700 dark-mode-text-gray-200">#INV-${Date.now()}</p>
+                    </div>
+                </div>
+                <table class="w-full border-collapse mb-6">
+                    <thead><tr class="bg-gray-200 dark-mode-bg-gray-700">
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">تاریخ</th>
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">تفصیل</th>
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">رقم</th>
+                    </tr></thead>
+                    <tbody>
+                        ${txs.map(t => `
+                            <tr>
+                                <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-gray-700 dark-mode-text-gray-200">${t.date}</td>
+                                <td class="border border-gray-200 dark-mode-border-gray-600 p-2 urdu-text text-gray-700 dark-mode-text-gray-200">${t.description || t.accountName}</td>
+                                <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${t.amount.toFixed(2)}</td>
+                            </tr>
+                        `).join('')}
+                        <tr class="bg-green-100 dark-mode-bg-green-900 font-bold">
+                            <td colspan="2" class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">کل رقم</td>
+                            <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${total.toFixed(2)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-center text-sm text-gray-600 dark-mode-text-gray-400 mt-8">
+                    <p class="urdu-text">شکریہ</p>
+                    <p class="urdu-text">یہ کمپیوٹر سے تیار کردہ انوائس ہے</p>
+                </div>
+            `;
+
+            this.openModal('invoiceModal');
+        },
+
+        // Reports
+        updateReportDropdowns() {
+            this.ui.partyLedgerSelect.innerHTML = '<option value="">پارٹی منتخب کریں</option>' +
+                this.data.parties.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+        },
+
+        generateReport(type) {
+            this.ui.reportDisplayArea.classList.remove('hidden');
+            this.ui.reportPlaceholder.classList.add('hidden');
+            let html = '';
+
+            if (type === 'daily') {
+                const date = this.ui.dailyDate.value;
+                if (!date) return this.showToast('تاریخ منتخب کریں', 'error');
+                this.ui.reportTitle.textContent = `روزنامچہ - ${date}`;
+                const txs = this.data.transactions.filter(t => t.date === date);
+                html = this.generateLedgerHTML(txs, 'روزنامچہ');
+            } else if (type === 'monthly') {
+                const monthVal = this.ui.monthlyDate.value;
+                if (!monthVal) return this.showToast('مہینہ منتخب کریں', 'error');
+                this.ui.reportTitle.textContent = `ماہانہ خلاصہ - ${monthVal}`;
+                const txs = this.data.transactions.filter(t => t.date.startsWith(monthVal));
+                html = this.generateSummaryHTML(txs, 'accountName');
+            } else if (type === 'yearly') {
+                const year = this.ui.yearlyDate.value;
+                if (!year) return this.showToast('سال درج کریں', 'error');
+                this.ui.reportTitle.textContent = `سالانہ خلاصہ - ${year}`;
+                const txs = this.data.transactions.filter(t => t.date.startsWith(year));
+                html = this.generateSummaryHTML(txs, 'accountName');
+            } else if (type === 'ledger') {
+                const accountId = parseInt(this.ui.ledgerAccount.value);
+                const start = this.ui.ledgerStartDate.value;
+                const end = this.ui.ledgerEndDate.value;
+                if (!accountId || !start || !end) return this.showToast('اکاؤنٹ اور تاریخ منتخب کریں۔', 'error');
+
+                const account = this.findAccount(this.data.accounts, accountId);
+                this.ui.reportTitle.textContent = `کھاتہ: ${account.name} (${start} تا ${end})`;
+
+                const openingBalance = this.data.transactions
+                    .filter(t => t.accountId === accountId && t.date < start)
+                    .reduce((bal, t) => bal + (t.debit || 0) - (t.credit || 0), 0);
+
+                const txs = this.data.transactions.filter(t => t.accountId === accountId && t.date >= start && t.date <= end);
+                html = this.generateLedgerHTML(txs, 'کھاتہ', openingBalance);
+            } else if (type === 'party-ledger') {
+                const partyId = parseInt(this.ui.partyLedgerSelect.value);
+                if (!partyId) return this.showToast('پارٹی منتخب کریں', 'error');
+                this.showPartyLedger(partyId);
+                return;
+            }
+
+            this.ui.reportContent.innerHTML = `<div class="overflow-x-auto">${html}</div>`;
+        },
+
+        generateLedgerHTML(transactions, title, openingBalance = null) {
+            let runningBalance = openingBalance ?? 0;
+            let totalDebit = 0;
+            let totalCredit = 0;
+
+            const rows = transactions.map(t => {
+                const debit = t.debit || 0;
+                const credit = t.credit || 0;
+                runningBalance += debit - credit;
+                totalDebit += debit;
+                totalCredit += credit;
+                return `
+                    <tr>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-gray-700 dark-mode-text-gray-200">${t.date}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 urdu-text text-gray-700 dark-mode-text-gray-200">${t.description || t.accountName}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${debit > 0 ? debit.toFixed(2) : '-'}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${credit > 0 ? credit.toFixed(2) : '-'}</td>
+                        ${openingBalance !== null ? `<td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${runningBalance.toFixed(2)}</td>` : ''}
+                    </tr>
+                `;
+            }).join('');
+
+            const balanceHeader = openingBalance !== null ? '<th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">بیلنس</th>' : '';
+            const openingRow = openingBalance !== null ? `
+                <tr class="font-bold bg-gray-100 dark-mode-bg-gray-700">
+                    <td colspan="4" class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">اوپننگ بیلنس</td>
+                    <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${openingBalance.toFixed(2)}</td>
+                </tr>` : '';
+
+            return `
+                <table class="w-full text-sm border-collapse">
+                    <thead><tr class="bg-gray-200 dark-mode-bg-gray-700">
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">تاریخ</th>
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">تفصیل</th>
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">ڈیبٹ</th>
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">کریڈٹ</th>
+                        ${balanceHeader}
+                    </tr></thead>
+                    <tbody>
+                        ${openingRow}
+                        ${rows}
+                        <tr class="font-bold bg-gray-200 dark-mode-bg-gray-700">
+                            <td colspan="2" class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">کل</td>
+                            <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${totalDebit.toFixed(2)}</td>
+                            <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${totalCredit.toFixed(2)}</td>
+                            ${openingBalance !== null ? `<td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${runningBalance.toFixed(2)}</td>` : ''}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        },
+
+        generateSummaryHTML(transactions, groupBy) {
+            const summary = transactions.reduce((acc, t) => {
+                const key = t[groupBy];
+                if (!acc[key]) acc[key] = { debit: 0, credit: 0 };
+                acc[key].debit += t.debit || 0;
+                acc[key].credit += t.credit || 0;
+                return acc;
+            }, {});
+
+            const rows = Object.entries(summary).map(([key, value]) => {
+                const balance = value.debit - value.credit;
+                return `
+                    <tr>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 urdu-text text-gray-700 dark-mode-text-gray-200">${key}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${value.debit.toFixed(2)}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right text-gray-700 dark-mode-text-gray-200">${value.credit.toFixed(2)}</td>
+                        <td class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right ${balance >= 0 ? 'text-green-600' : 'text-red-600'}">
+                            ${Math.abs(balance).toFixed(2)} ${balance >= 0 ? 'Dr' : 'Cr'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            return `
+                <table class="w-full text-sm border-collapse">
+                    <thead><tr class="bg-gray-200 dark-mode-bg-gray-700">
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">اکاؤنٹ</th>
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">کل ڈیبٹ</th>
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">کل کریڈٹ</th>
+                        <th class="border border-gray-200 dark-mode-border-gray-600 p-2 text-right urdu-text text-gray-700 dark-mode-text-gray-200">بیلنس</th>
+                    </tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        },
+
+        printReport() {
+            if (!this.ui.reportContent.innerHTML.trim()) {
+                this.showToast('پہلے رپورٹ بنائیں۔', 'error');
+                return;
+            }
+            window.print();
+        },
+
+        exportToExcel() {
+            if (!this.ui.reportContent.innerHTML.trim()) {
+                this.showToast('پہلے رپورٹ بنائیں۔', 'error');
+                return;
+            }
+
+            const table = this.ui.reportContent.querySelector('table');
+            if (!table) return;
+
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td, th');
+                const csvRow = [];
+                cols.forEach(col => csvRow.push('"' + col.textContent.trim() + '"'));
+                csv.push(csvRow.join(','));
+            });
+
+            const csvContent = '\uFEFF' + csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `report-${Date.now()}.csv`;
+            link.click();
+            
+            this.showToast('Excel فائل ڈاؤن لوڈ ہو رہی ہے۔', 'success');
+        },
+
+        // Account Management
+        renderAccountsTree() {
+            this.ui.accountsTree.innerHTML = '';
+            const createNode = (account, level) => {
+                const childrenHTML = account.children.map(child => createNode(child, level + 1)).join('');
+                return `
+                    <div class="p-2 rounded ${level > 0 ? 'mr-4 bg-white dark-mode' : 'bg-gray-100 dark-mode-bg-gray-700'} border border-gray-200 dark-mode-border-gray-600">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold urdu-text text-gray-700 dark-mode-text-gray-200">${account.name}</span>
+                            <div class="flex gap-1">
+                                <button data-action="add-sub" data-id="${account.id}" class="text-xs bg-green-500 text-white px-2 py-1 rounded urdu-text hover:bg-green-600">سب</button>
+                                <button data-action="delete" data-id="${account.id}" class="text-xs bg-red-500 text-white px-2 py-1 rounded urdu-text hover:bg-red-600">حذف</button>
+                            </div>
+                        </div>
+                        <div class="mt-1 space-y-1">${childrenHTML}</div>
+                    </div>
+                `;
+            };
+            this.data.accounts.forEach(acc => this.ui.accountsTree.innerHTML += createNode(acc, 0));
+            this.updateReportDropdowns();
+            this.initSearchableDropdowns();
+            this.initMultipleEntryRows();
+        },
+
+        addAccount() {
+            const name = this.ui.newAccountName.value.trim();
+            if (!name) return;
+
+            this.data.accounts.push({ 
+                id: this.data.settings.nextAccountId++, 
+                name: name, 
+                children: [] 
+            });
+            this.saveData();
+            this.renderAccountsTree();
+            this.ui.newAccountName.value = '';
+            this.showToast('نیا اکاؤنٹ شامل کر دیا گیا۔', 'success');
+        },
+
+        openSubAccountModal(parentId) {
+            this.ui.parentIdInput.value = parentId;
+            this.ui.subAccountNameInput.value = '';
+            this.openModal('addSubAccountModal');
+            this.ui.subAccountNameInput.focus();
+        },
+
+        saveSubAccount() {
+            const parentId = parseInt(this.ui.parentIdInput.value);
+            const name = this.ui.subAccountNameInput.value.trim();
+            if (!name) return;
+
+            const parent = this.findAccount(this.data.accounts, parentId);
+            if (parent) {
+                parent.children.push({ 
+                    id: this.data.settings.nextAccountId++, 
+                    name: name, 
+                    children: [] 
+                });
+                this.saveData();
+                this.renderAccountsTree();
+                this.closeModal('addSubAccountModal');
+                this.showToast('سب-اکاؤنٹ شامل کر دیا گیا۔', 'success');
+            }
+        },
+
+        deleteAccount(accountId) {
+            const accountToDelete = this.findAccount(this.data.accounts, accountId);
+            if (!accountToDelete) return;
+
+            const associatedTxs = this.data.transactions.filter(t => t.accountId === accountId).length;
+            if (associatedTxs > 0) {
+                const message = `'${accountToDelete.name}' سے ${associatedTxs} ٹرانزیکشنز منسلک ہیں۔ کیا آپ واقعی حذف کرنا چاہتے ہیں؟`;
+                if (!confirm(message)) return;
+            }
+
+            const removeRecursively = (accounts, id) => {
+                for (let i = accounts.length - 1; i >= 0; i--) {
+                    if (accounts[i].id === id) {
+                        accounts.splice(i, 1);
+                        return true;
+                    }
+                    if (removeRecursively(accounts[i].children, id)) return true;
+                }
+                return false;
+            };
+
+            this.data.transactions = this.data.transactions.filter(t => t.accountId !== accountId);
+
+            if (removeRecursively(this.data.accounts, accountId)) {
+                this.saveData();
+                this.renderAccountsTree();
+                this.showToast('اکاؤنٹ حذف کر دیا گیا۔', 'success');
+            }
+        },
+
+        // Font Management
+        applyFont(fontData, fontName) {
+            document.getElementById('font-style-holder').innerHTML = `
+                @font-face {
+                    font-family: '${fontName}';
+                    src: url(${fontData});
+                }
+                body, button, input, select, textarea { 
+                    font-family: '${fontName}', system-ui, sans-serif !important; 
+                }
+            `;
+        },
+
+        handleFontUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const fontData = e.target.result;
+                const fontName = 'CustomUserFont';
+                this.data.settings.customFont = { name: fontName, data: fontData };
+                this.applyFont(fontData, fontName);
+                this.saveData();
+                this.showToast('فونٹ کامیابی سے لاگو ہو گیا۔', 'success');
+            };
+            reader.readAsDataURL(file);
+        },
+
+        resetFont() {
+            this.data.settings.customFont = null;
+            document.getElementById('font-style-holder').innerHTML = `
+                body, button, input, select, textarea {
+                    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                }
+                .urdu-text { font-family: 'Noto Nastaliq Urdu', system-ui; }
+            `;
+            this.saveData();
+            this.showToast('فونٹ ڈیفالٹ پر ری سیٹ ہو گیا۔', 'info');
+        },
+
+        // Data Backup & Restore
+        backupData() {
+            const dataStr = JSON.stringify(this.data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `farm-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            this.showToast('بیک اپ فائل ڈاؤن لوڈ ہو رہی ہے۔', 'success');
+        },
+
+        restoreData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!confirm('موجودہ تمام ڈیٹا ختم ہو جائے گا۔ جاری رکھیں؟')) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.settings && data.accounts && data.transactions) {
+                        this.data = data;
+                        this.saveData();
+                        this.showToast('ڈیٹا بحال ہو گیا، صفحہ ری لوڈ ہو رہا ہے۔', 'success');
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        this.showToast('بیک اپ فائل غلط ہے۔', 'error');
+                    }
+                } catch (err) {
+                    this.showToast('فائل پڑھنے میں خرابی: ' + err.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        },
+
+        clearAllData() {
+            if (confirm('کیا آپ واقعی تمام ڈیٹا حذف کرنا چاہتے ہیں؟')) {
+                localStorage.removeItem(this.DB_KEY);
+                this.showToast('ڈیٹا حذف کر دیا گیا۔', 'success');
+                setTimeout(() => location.reload(), 2000);
+            }
+        },
+
+        // PWA Functions
+        initPWA() {
+            if ('serviceWorker' in navigator) {
+                this.registerServiceWorker();
+            }
+
+            this.createManifest();
+
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                this.ui.installBtn.classList.remove('hidden');
+            });
+
+            this.ui.installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        this.showToast('ایپ انسٹال ہو رہی ہے۔', 'success');
+                    }
+                    deferredPrompt = null;
+                    this.ui.installBtn.classList.add('hidden');
+                }
+            });
+        },
+
+        createManifest() {
+            const manifest = {
+                name: 'جدید فارم منیجمنٹ سسٹم',
+                short_name: 'فارم ایپ',
+                description: 'مکمل فارم اکاؤنٹنگ اور منیجمنٹ',
+                start_url: '.',
+                display: 'standalone',
+                background_color: '#f0faf9',
+                theme_color: '#10b981',
+                orientation: 'portrait',
+                icons: [
+                    {
+                        src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%2310b981" width="100" height="100"/><text y="75" font-size="60" text-anchor="middle" x="50">🌾</text></svg>',
+                        sizes: '192x192',
+                        type: 'image/svg+xml'
+                    },
+                    {
+                        src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%2310b981" width="100" height="100"/><text y="75" font-size="60" text-anchor="middle" x="50">🌾</text></svg>',
+                        sizes: '512x512',
+                        type: 'image/svg+xml'
+                    }
+                ]
+            };
+
+            const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+            const manifestURL = URL.createObjectURL(manifestBlob);
+            document.getElementById('manifest-placeholder').setAttribute('href', manifestURL);
+        },
+
+        registerServiceWorker() {
+            const swCode = `
+                const CACHE_NAME = 'farm-app-v3';
+                const urlsToCache = ['./', 'https://cdn.tailwindcss.com', 'https://cdn.jsdelivr.net/npm/chart.js'];
+
+                self.addEventListener('install', event => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+                    );
+                });
+
+                self.addEventListener('fetch', event => {
+                    event.respondWith(
+                        caches.match(event.request).then(response => response || fetch(event.request))
+                    );
+                });
+
+                self.addEventListener('activate', event => {
+                    event.waitUntil(
+                        caches.keys().then(cacheNames => 
+                            Promise.all(
+                                cacheNames.filter(name => name !== CACHE_NAME).map(name => caches.delete(name))
+                            )
+                        )
+                    );
+                });
+            `;
+
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swURL = URL.createObjectURL(blob);
+
+            navigator.serviceWorker.register(swURL).then(registration => {
+                console.log('Service Worker registered:', registration);
+            }).catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+    };
+
+    // Initialize App
+    document.addEventListener('DOMContentLoaded', () => {
+        FarmApp.init();
+    });
+    </script>
+</body>
+</html>
